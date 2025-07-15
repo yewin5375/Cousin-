@@ -1,0 +1,37 @@
+body {
+  font-family: "Myanmar Text", sans-serif;
+  background-color: #fff8f0;
+  color: #222;
+  text-align: center;
+  padding: 20px;
+}
+
+h1, h2 {
+  color: #d35400;
+}
+
+.item {
+  margin: 10px;
+  padding: 10px;
+  background-color: #ffecb3;
+  border-radius: 10px;
+}
+
+button {
+  padding: 5px 10px;
+  margin-left: 10px;
+  background-color: #d35400;
+  color: white;
+  border: none;
+  border-radius: 5px;
+}
+
+.btn {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #2ecc71;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  margin-top: 20px;
+}
