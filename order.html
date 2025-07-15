@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Order Menu</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h2>🍢 Cousin Menu</h2>
+
+  <div class="item">
+    Beef BBQ – 3000 MMK 
+    <button onclick="addToTotal(3000)">+</button>
+  </div>
+  <div class="item">
+    Chicken BBQ – 2500 MMK 
+    <button onclick="addToTotal(2500)">+</button>
+  </div>
+  <div class="item">
+    Mutton BBQ – 3500 MMK 
+    <button onclick="addToTotal(3500)">+</button>
+  </div>
+
+  <hr>
+  <h3>Total: <span id="total">0</span> MMK</h3>
+
+  <script>
+    let total = 0;
+    function addToTotal(price) {
+      total += price;
+      document.getElementById("total").innerText = total;
+    }
+  </script>
+
+  <p><a href="index.html">⬅️ Back</a></p>
+</body>
+</html>
