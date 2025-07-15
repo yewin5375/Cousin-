@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Receipt - Cousin POS</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    @media print {
+      .noprint {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h2>🧾 Receipt</h2>
+
+  <div id="receipt-details">
+    <p>🧑‍🍳 Shop: Cousin Halal BBQ</p>
+    <p>🕓 Date: <span id="date"></span></p>
+    <p>💰 Total: <span id="total"></span> MMK</p>
+  </div>
+
+  <br>
+  <button class="noprint" onclick="window.print()">🖨️ Print Receipt</button>
+  <a class="btn noprint" href="index.html">🏠 Back to Home</a>
+
+  <script>
+    document.getElementById("date").innerText = new Date().toLocaleString();
+    const total = localStorage.getItem("orderTotal") || 0;
+    document.getElementById("total").innerText = total;
+  </script>
+</body>
+</html>
