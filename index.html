@@ -14,5 +14,12 @@
   <h1>Cousin Halal BBQ</h1>
   <p>Welcome! ကျေးဇူးပြု၍အော်ဒါအတင်ရန်...</p>
   <a class="btn" href="order.html">➡️ Order Now</a>
-</body>
+</body><button onclick="logout()">🚪 Logout</button>
+
+<script>
+  function logout() {
+    localStorage.removeItem("loggedIn");
+    window.location.href = "login.html";
+  }
+</script>
 </html>
