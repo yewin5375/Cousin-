@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <title>Cousin POS - Order</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Order - Cousin POS</title>
   <style>
     body {
-      margin: 0;
       font-family: sans-serif;
-      background: #f6f6f6;
+      background: #f2f2f2;
+      margin: 0;
       padding: 20px;
     }
 
@@ -17,107 +17,148 @@
       margin-bottom: 20px;
     }
 
+    .top-controls {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .top-controls button {
+      padding: 8px 16px;
+      margin: 5px;
+      border: none;
+      background: #ff6600;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 15px;
+      gap: 16px;
     }
 
-    .product-card {
+    .card {
       background: white;
-      padding: 10px;
+      padding: 12px;
       border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       text-align: center;
-      transition: transform 0.2s;
     }
 
-    .product-card:hover {
-      transform: translateY(-3px);
-    }
-
-    .product-card img {
+    .card img {
       width: 100%;
-      height: 120px;
+      height: 100px;
       object-fit: cover;
       border-radius: 8px;
     }
 
-    .product-card h3 {
-      font-size: 16px;
-      margin: 10px 0 5px;
-    }
-
-    .product-card p {
-      margin: 0;
-      color: #666;
+    .card input {
+      width: 90%;
+      padding: 6px;
+      margin: 5px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
       font-size: 14px;
     }
 
     .qty-controls {
-      margin-top: 10px;
       display: flex;
       justify-content: center;
       align-items: center;
       gap: 10px;
+      margin-top: 8px;
     }
 
     .qty-controls button {
       padding: 5px 12px;
-      font-size: 16px;
-      border: none;
-      border-radius: 6px;
       background: #ff6600;
       color: white;
-      cursor: pointer;
-    }
-
-    .qty-controls span {
-      font-size: 16px;
-      min-width: 20px;
-      display: inline-block;
-      text-align: center;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
   <h2>🍗 Cousin POS - Order Items</h2>
-  <div class="grid" id="menuGrid">
-    <!-- Products will be loaded here -->
+
+  <div class="top-controls">
+    <button onclick="enableEdit()">✏️ Edit Menu</button>
+    <button onclick="saveMenu()">💾 Save</button>
+    <button onclick="resetMenu()">♻️ Reset</button>
   </div>
 
+  <div class="grid" id="menuGrid"></div>
+
   <script>
-    const menuItems = [
-      { name: "BBQ Chicken", price: 3000, image: "bbq1.jpg" },
-      { name: "Beef Kebab", price: 3500, image: "bbq2.jpg" },
-      { name: "Chicken Wings", price: 2800, image: "bbq3.jpg" },
-      { name: "Lamb Skewer", price: 4000, image: "bbq4.jpg" },
+    const defaultMenu = [
+      { name: "BBQ Chicken", price: 3000, image: "https://via.placeholder.com/150" },
+      { name: "Beef Kebab", price: 3500, image: "https://via.placeholder.com/150" },
+      { name: "Chicken Wings", price: 2800, image: "https://via.placeholder.com/150" },
+      { name: "Lamb Skewer", price: 4000, image: "https://via.placeholder.com/150" }
     ];
 
-    const grid = document.getElementById("menuGrid");
+    function getMenu() {
+      return JSON.parse(localStorage.getItem("menuItems") || JSON.stringify(defaultMenu));
+    }
 
-    menuItems.forEach(item => {
-      const card = document.createElement("div");
-      card.className = "product-card";
-      card.innerHTML = `
-        <img src="${item.image}" alt="${item.name}" />
-        <h3>${item.name}</h3>
-        <p>${item.price} MMK</p>
-        <div class="qty-controls">
-          <button onclick="updateQty(this, -1)">−</button>
-          <span>0</span>
-          <button onclick="updateQty(this, 1)">+</button>
-        </div>
-      `;
-      grid.appendChild(card);
-    });
+    function saveMenu() {
+      const cards = document.querySelectorAll(".card");
+      const updated = [];
+      cards.forEach(card => {
+        const name = card.querySelector(".name").value;
+        const price = parseInt(card.querySelector(".price").value);
+        const image = card.querySelector(".image").value;
+        updated.push({ name, price, image });
+      });
+      localStorage.setItem("menuItems", JSON.stringify(updated));
+      alert("✅ Menu saved!");
+      loadMenu();
+    }
 
-    function updateQty(btn, delta) {
+    function resetMenu() {
+      localStorage.removeItem("menuItems");
+      loadMenu();
+    }
+
+    function enableEdit() {
+      document.querySelectorAll(".name, .price, .image").forEach(input => {
+        input.removeAttribute("readonly");
+        input.style.background = "#fff8e1";
+      });
+    }
+
+    function loadMenu() {
+      const grid = document.getElementById("menuGrid");
+      const menu = getMenu();
+      grid.innerHTML = "";
+      menu.forEach(item => {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+          <img src="${item.image}" />
+          <input class="name" type="text" value="${item.name}" readonly />
+          <input class="price" type="number" value="${item.price}" readonly />
+          <input class="image" type="text" value="${item.image}" readonly />
+          <div class="qty-controls">
+            <button onclick="changeQty(this, -1)">−</button>
+            <span>0</span>
+            <button onclick="changeQty(this, 1)">+</button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function changeQty(btn, delta) {
       const span = btn.parentElement.querySelector("span");
       let count = parseInt(span.textContent);
       count = Math.max(0, count + delta);
       span.textContent = count;
     }
+
+    loadMenu();
   </script>
 </body>
 </html>
