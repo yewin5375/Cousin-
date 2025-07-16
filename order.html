@@ -2,44 +2,122 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Order Menu</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Order - Cousin POS</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background: #f6f6f6;
+      padding: 20px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 15px;
+    }
+
+    .product-card {
+      background: white;
+      padding: 10px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      transition: transform 0.2s;
+    }
+
+    .product-card:hover {
+      transform: translateY(-3px);
+    }
+
+    .product-card img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .product-card h3 {
+      font-size: 16px;
+      margin: 10px 0 5px;
+    }
+
+    .product-card p {
+      margin: 0;
+      color: #666;
+      font-size: 14px;
+    }
+
+    .qty-controls {
+      margin-top: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .qty-controls button {
+      padding: 5px 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      background: #ff6600;
+      color: white;
+      cursor: pointer;
+    }
+
+    .qty-controls span {
+      font-size: 16px;
+      min-width: 20px;
+      display: inline-block;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
-  <h2>🍢 Cousin Menu</h2>
-
-  <div class="item">
-    Beef BBQ – 3000 MMK 
-    <button onclick="addToTotal(3000)">+</button>
-  </div>
-  <div class="item">
-    Chicken BBQ – 2500 MMK 
-    <button onclick="addToTotal(2500)">+</button>
-  </div>
-  <div class="item">
-    Mutton BBQ – 3500 MMK 
-    <button onclick="addToTotal(3500)">+</button>
+  <h2>🍗 Cousin POS - Order Items</h2>
+  <div class="grid" id="menuGrid">
+    <!-- Products will be loaded here -->
   </div>
 
-  <hr>
-  <h3>Total: <span id="total">0</span> MMK</h3>
+  <script>
+    const menuItems = [
+      { name: "BBQ Chicken", price: 3000, image: "bbq1.jpg" },
+      { name: "Beef Kebab", price: 3500, image: "bbq2.jpg" },
+      { name: "Chicken Wings", price: 2800, image: "bbq3.jpg" },
+      { name: "Lamb Skewer", price: 4000, image: "bbq4.jpg" },
+    ];
 
-  <br>
-<a class="btn" href="payment.html">💸 Proceed to Payment</a>
-  
-  <a class="btn" href="receipt.html">🧾 Get Receipt</a>
-    let total = 0;
-    function addToTotal(price) {
-      total += price;
-      
-  document.getElementById("total").innerText = total;
-  localStorage.setItem("orderTotal", total); // 🟢 Save total
-      }
-      document.getElementById("total").innerText = total;
+    const grid = document.getElementById("menuGrid");
+
+    menuItems.forEach(item => {
+      const card = document.createElement("div");
+      card.className = "product-card";
+      card.innerHTML = `
+        <img src="${item.image}" alt="${item.name}" />
+        <h3>${item.name}</h3>
+        <p>${item.price} MMK</p>
+        <div class="qty-controls">
+          <button onclick="updateQty(this, -1)">−</button>
+          <span>0</span>
+          <button onclick="updateQty(this, 1)">+</button>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+
+    function updateQty(btn, delta) {
+      const span = btn.parentElement.querySelector("span");
+      let count = parseInt(span.textContent);
+      count = Math.max(0, count + delta);
+      span.textContent = count;
     }
   </script>
-
-  <p><a href="index.html">⬅️ Back</a></p>
 </body>
 </html>
